@@ -1,4 +1,4 @@
-# More than a Hack 2027 — Ball Possession Submission
+# Version Submission
 
 Bidirectional LSTM trained on the three Metrica public sample games,
 applied frame-by-frame to the BAR-ATH tactical tracking data.
