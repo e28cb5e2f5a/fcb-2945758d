@@ -1,0 +1,26 @@
+name                                            bw   msf interp   spellF1  macroF1  poss
+----------------------------------------------------------------------------------------
+lstm_bw5_msf125_interp_v2                        5   125   True    0.3231   0.6109     9
+lstm_bw5_msf50_interp_v2                         5    50   True    0.2968   0.6561    14
+lstm_bw5_msf100_interp_v2                        5   100   True    0.2897   0.6473    12
+lstm_bw5_msf75_interp_v2                         5    75   True    0.2800   0.6462    13
+lstm_bw10_msf100_interp_v2                      10   100   True    0.2571   0.5940    11
+lstm_bw5_msf125_v2                               5   125  False    0.2519   0.5637    10
+lstm_bw5_msf50_v2                                5    50  False    0.2500   0.6085    15
+lstm_bw10_msf75_interp_v2                       10    75   True    0.2400   0.6072    13
+lstm_bw20_msf125_v2                             20   125  False    0.2370   0.5220    10
+lstm_bw10_msf125_interp_v2                      10   125   True    0.2308   0.5660     9
+lstm_bw20_msf125_interp_v2                      20   125   True    0.2286   0.5967    11
+lstm_bw5_msf100_v2                               5   100  False    0.2194   0.6034    14
+lstm_bw5_msf75_v2                                5    75  False    0.2194   0.6034    14
+lstm_bw10_msf50_interp_v2                       10    50   True    0.2118   0.6318    17
+lstm_bw20_msf50_v2                              20    50  False    0.2111   0.5838    19
+lstm_bw10_msf125_v2                             10   125  False    0.2074   0.5046    10
+lstm_bw20_msf100_v2                             20   100  False    0.2065   0.5569    14
+lstm_bw20_msf75_v2                              20    75  False    0.2065   0.5569    14
+lstm_bw20_msf100_interp_v2                      20   100   True    0.2000   0.5867    15
+lstm_bw20_msf75_interp_v2                       20    75   True    0.2000   0.5867    15
+lstm_bw10_msf100_v2                             10   100  False    0.2000   0.5279    11
+lstm_bw10_msf50_v2                              10    50  False    0.1946   0.6046    20
+lstm_bw20_msf50_interp_v2                       20    50   True    0.1882   0.5981    17
+lstm_bw10_msf75_v2                              10    75  False    0.1867   0.5622    13

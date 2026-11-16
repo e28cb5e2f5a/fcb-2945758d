@@ -1,0 +1,6 @@
+name                                            bw   msf interp      n_H     n_A     n_D     n_X spells
+----------------------------------------------------------------------------------------------------
+lstm_bw3_msf125_corrected_gt_all3                3   125  False   70,758  20,922  67,177  40,462    151
+
+Config selection: run LOO evaluation on Game 3 to compare configs.
+  python3.11 src/pipeline.py --train 1 2 --predict 3 --model lstm

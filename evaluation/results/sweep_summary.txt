@@ -1,0 +1,26 @@
+name                                  bw   msf interp   spellF1  macroF1  poss
+--------------------------------------------------------------------------------
+lstm_bw5_msf125_interp                 5   125   True    0.3857   0.6319    11
+lstm_bw5_msf100_interp                 5   100   True    0.3484   0.6359    14
+lstm_bw5_msf75_interp                  5    75   True    0.3375   0.6428    15
+lstm_bw10_msf125_interp               10   125   True    0.3333   0.5721     7
+lstm_bw10_msf75_interp                10    75   True    0.3286   0.6087    11
+lstm_bw5_msf50_interp                  5    50   True    0.3273   0.6507    16
+lstm_bw10_msf100_interp               10   100   True    0.3200   0.5927     8
+lstm_bw10_msf50_interp                10    50   True    0.3172   0.6195    12
+lstm_bw5_msf125                        5   125  False    0.3034   0.6253    12
+lstm_bw10_msf75                       10    75  False    0.2839   0.5631    14
+lstm_bw5_msf100                        5   100  False    0.2667   0.6343    16
+lstm_bw10_msf50                       10    50  False    0.2667   0.5857    16
+lstm_bw10_msf125                      10   125  False    0.2615   0.5264     9
+lstm_bw5_msf75                         5    75  False    0.2514   0.6416    18
+lstm_bw5_msf50                         5    50  False    0.2444   0.6504    19
+lstm_bw10_msf100                      10   100  False    0.2429   0.5498    11
+lstm_bw20_msf125_interp               20   125   True    0.2000   0.5319    11
+lstm_bw20_msf75_interp                20    75   True    0.1889   0.5884    19
+lstm_bw20_msf100_interp               20   100   True    0.1750   0.5385    15
+lstm_bw20_msf50_interp                20    50   True    0.1744   0.6096    22
+lstm_bw20_msf50                       20    50  False    0.1700   0.6003    23
+lstm_bw20_msf125                      20   125  False    0.1571   0.4920    11
+lstm_bw20_msf75                       20    75  False    0.1556   0.5689    19
+lstm_bw20_msf100                      20   100  False    0.1419   0.5086    14

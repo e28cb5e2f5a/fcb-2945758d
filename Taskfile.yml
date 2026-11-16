@@ -1,0 +1,92 @@
+version: '3'
+
+tasks:
+  setup:
+    desc: Install project requirements (numpy, pandas, kloppy, etc.)
+    cmds:
+      - python3.11 -m pip install -r requirements-starter.txt
+
+  sample-data:
+    desc: Download all 3 sample games and build possession GT CSVs
+    cmds:
+      - python3.11 src/task_sample_data.py {{.CLI_ARGS}}
+
+  test:
+    desc: Run all tests
+    cmds:
+      - python3.11 -m pytest tests/ -v {{.CLI_ARGS}}
+
+  train:
+    desc: Train HMM and LSTM on all 3 games, predict on each, write result CSVs
+    cmds:
+      - python3.11 src/pipeline.py --train 1 2 3 --model hmm  --save-model models/hmm.pkl  --predict 1 --out evaluation/results/hmm_game1.csv
+      - python3.11 src/pipeline.py --load-model models/hmm.pkl  --model hmm  --predict 2 --out evaluation/results/hmm_game2.csv
+      - python3.11 src/pipeline.py --load-model models/hmm.pkl  --model hmm  --predict 3 --out evaluation/results/hmm_game3.csv
+      - python3.11 src/pipeline.py --train 1 2 3 --model lstm --save-model models/lstm.pt  --predict 1 --out evaluation/results/lstm_game1.csv
+      - python3.11 src/pipeline.py --load-model models/lstm.pt  --model lstm --predict 2 --out evaluation/results/lstm_game2.csv
+      - python3.11 src/pipeline.py --load-model models/lstm.pt  --model lstm --predict 3 --out evaluation/results/lstm_game3.csv
+
+  predict:
+    desc: Re-run saved models on all 3 games without retraining (requires task train first)
+    cmds:
+      - python3.11 src/pipeline.py --load-model models/hmm.pkl  --model hmm  --predict 1 --out evaluation/results/hmm_game1.csv
+      - python3.11 src/pipeline.py --load-model models/lstm.pt  --model lstm --predict 1 --out evaluation/results/lstm_game1.csv
+      - python3.11 src/pipeline.py --load-model models/hmm.pkl  --model hmm  --predict 2 --out evaluation/results/hmm_game2.csv
+      - python3.11 src/pipeline.py --load-model models/lstm.pt  --model lstm --predict 2 --out evaluation/results/lstm_game2.csv
+      - python3.11 src/pipeline.py --load-model models/hmm.pkl  --model hmm  --predict 3 --out evaluation/results/hmm_game3.csv
+      - python3.11 src/pipeline.py --load-model models/lstm.pt  --model lstm --predict 3 --out evaluation/results/lstm_game3.csv
+
+  score:
+    desc: Score each game's submissions against that game's own public 5-min GT
+    cmds:
+      - python3.11 evaluation/run_evaluation.py --gt evaluation/gt/Sample_Game_1_possession_gt_public.csv --results evaluation/results {{.CLI_ARGS}} || true
+      - python3.11 evaluation/run_evaluation.py --gt evaluation/gt/Sample_Game_2_possession_gt_public.csv --results evaluation/results {{.CLI_ARGS}} || true
+      - python3.11 evaluation/run_evaluation.py --gt evaluation/gt/Sample_Game_3_possession_gt_public.csv --results evaluation/results {{.CLI_ARGS}} || true
+
+  predict-challenge:
+    desc: Predict BAR-ATH challenge data using saved models (run train-challenge first if models are missing)
+    cmds:
+      - python3.11 src/predict_challenge.py --model hmm --name hmm_challenge --load-model models/hmm_challenge.pkl
+      - python3.11 src/predict_challenge.py --model lstm --name lstm_challenge --load-model models/lstm_challenge.pt
+
+  predict-challenge-msf:
+    desc: Re-predict BAR-ATH challenge with msf sweep (50/75/100/125/150) using lstm_v2
+    cmds:
+      - for: [50, 75, 100, 125, 150]
+        cmd: python3.11 src/predict_challenge.py --model lstm --load-model models/lstm_v2.pt --min-spell-frames {{.ITEM}} --name lstm_v2_msf{{.ITEM}}
+
+  train-challenge:
+    desc: Train HMM and LSTM on all 3 sample games and save to models/
+    cmds:
+      - python3.11 src/predict_challenge.py --model hmm --name hmm_challenge --save-model models/hmm_challenge.pkl
+      - python3.11 src/predict_challenge.py --model lstm --name lstm_challenge --save-model models/lstm_challenge.pt
+
+  score-barth:
+    desc: "REPORTING ONLY — run once after config is locked. Do not use to compare configs (RULES.md §2)."
+    cmds:
+      - python3.11 evaluation/run_evaluation.py --gt evaluation/gt/BAR-ATH_possession_gt_public.csv --results evaluation/results {{.CLI_ARGS}}
+
+  tune:
+    desc: Grid-search hyperparams on the public 5-min slice of all 3 games
+    cmds:
+      - python3.11 src/tune.py --game-dir data/sample/Sample_Game_1 --events-path data/sample/Sample_Game_1/Sample_Game_1_RawEventsData.csv
+      - python3.11 src/tune.py --game-dir data/sample/Sample_Game_2 --events-path data/sample/Sample_Game_2/Sample_Game_2_RawEventsData.csv
+      - python3.11 src/tune.py --game-dir data/sample/Sample_Game_3 --events-path data/sample/Sample_Game_3/Sample_Game_3_events.json
+
+  tune-full:
+    desc: Evaluate best params against full GT of all 3 games (final validation only)
+    cmds:
+      - python3.11 src/tune.py --game-dir data/sample/Sample_Game_1 --events-path data/sample/Sample_Game_1/Sample_Game_1_RawEventsData.csv --full-gt
+      - python3.11 src/tune.py --game-dir data/sample/Sample_Game_2 --events-path data/sample/Sample_Game_2/Sample_Game_2_RawEventsData.csv --full-gt
+      - python3.11 src/tune.py --game-dir data/sample/Sample_Game_3 --events-path data/sample/Sample_Game_3/Sample_Game_3_events.json --full-gt
+
+  dashboard:
+    desc: Launch possession debug dashboard
+    cmds:
+      - streamlit run src/dashboard/app.py
+
+  browse:
+    desc: Open MLflow UI and Streamlit dashboard in Chrome
+    cmds:
+      - open -a "Google Chrome" http://localhost:5001/
+      - open -a "Google Chrome" http://localhost:8502/

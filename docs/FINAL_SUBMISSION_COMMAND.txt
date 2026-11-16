@@ -1,0 +1,65 @@
+Locked config (v13 — 2026-11-12, tracking-proxy features §C13)
+  bw=5.0  msf=50  seed=42  hs=128  epochs=20  no-interp
+  n_feat=18 (ball_visible absent; cols 14-17: ball_in_final_third,
+             ball_vx, set_piece_proxy, h_centroid_adv_x; §C13)
+  corrected GT (generate_gt.py; GT frame +1 offset fix; §C9)
+  BALL LOST excluded from DEAD_BALL_TYPES
+  threshold-free visible-ball clamp active
+  Game 3 LOO spellF1: 0.6000 (msf=50; §C13)
+  Weighted LOO delta vs v8: +0.0773 (3/3 folds; §C13)
+  BAR-ATH public window spellF1: 0.4000 (macroF1 0.6310; reporting only)
+
+PREREQUISITE — Generate corrected GT (one-time, safe to re-run)
+===============================================================
+task setup
+
+task sample-data
+
+python3.11 src/generate_gt.py
+
+Step 1 — Train on all 3 sample games and predict BAR-ATH
+=========================================================
+python3.11 src/sweep_challenge.py \
+    --bw 5.0 \
+    --msf 50 \
+    --hidden-size 128 \
+    --max-epochs 20 \
+    --seed 42 \
+    --run-id v13 \
+    --model-path models/diagonalmar.pt \
+    --output-csv evaluation/results/diagonalmar.csv
+
+Step 2 — Verify row count (must be exactly 199,319)
+====================================================
+python3.11 -c "
+import csv
+with open('evaluation/results/diagonalmar.csv') as f:
+    rows = sum(1 for _ in csv.reader(f)) - 1
+assert rows == 199319, f'Expected 199319 rows, got {rows}'
+print(f'OK: {rows} rows')
+"
+
+Step 3 — Score public window for confirmation (reporting only)
+==============================================================
+NOTE: evaluation/gt/BAR-ATH_possession_gt_public.csv is the
+competition-supplied public BAR-ATH GT (199,319 rows, 7,500
+non-X scored frames: H:3454 A:2577 D:1469, D%=19.6%). It is
+committed in the repo and is NOT produced or modified by
+generate_gt.py (which only writes corrected files for the three
+sample games).
+
+python3.11 evaluation/run_evaluation.py \
+    --gt evaluation/gt/BAR-ATH_possession_gt_public.csv \
+    --results evaluation/results \
+    --no-detail
+
+Public window spellF1 (reporting only): 0.4000 (macroF1 0.6310)
+
+Submit: evaluation/results/diagonalmar.csv
+
+
+Validate file
+==================
+
+python3.11 evaluation/validate_submission.py evaluation/results/diagonalmar.csv
+

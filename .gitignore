@@ -1,0 +1,66 @@
+.cache
+/logs
+/tools/others
+/mlflow.db
+/mlruns
+
+# -- private ground truth ----------------------------------------------------------------------
+# The public ground truth is evaluation/gt/*_possession_gt_public.csv and is committed on purpose.
+# The full-match files below are graded over all 158857 frames and must never be published.
+*_possession_gt.csv
+*_possession_gt_reference.csv
+*_possession_gt_blind.csv
+*_possession_gt_tuning.csv
+*_possession_*.json
+possession_by_frame.pkl
+
+# -- submissions -------------------------------------------------------------------------------
+# Any file in results/ is a set of labels for the whole match. A perfect one is a copy of the
+# ground truth, so the folder ships empty and stays that way.
+/evaluation/results/*.csv
+/evaluation/gt/*_corrected.csv
+
+# ...with two deliberate exceptions.
+# 1. Baselines are computed from the ATD alone -- the same ATD every enrolled participant has --
+#    and never read a ground truth of any kind. They ship so a fresh clone has something to score.
+!evaluation/results/baseline_*.csv
+# 2. The submission CSV is committed so organisers receive the exact file we ran, not a
+#    platform-dependent retrain.  Predictions carry no ground-truth information.
+!evaluation/results/diagonalmar.csv
+evaluation/reports/
+evaluation/scoreboard.csv
+evaluation/__pycache__/
+
+# -- gated data --------------------------------------------------------------------------------
+# data/ is committed empty, with only its README, so the folder participants are told to unpack
+# into actually exists in a fresh clone. Everything they put in it stays out of git.
+/data/*
+!data/README.md
+
+*.mp4
+*.gzip
+*.pl3container
+
+# Organiser tooling lives in ../mtah2027-organizers, outside this repository. This line is
+# insurance against it being recreated in here by habit.
+organizers/
+
+# -- trained models ----------------------------------------------------------------------------
+# Saved model files are generated output; rebuild with `task train`.
+/models/*
+# The submission model is committed so the submission CSV can be reproduced
+# exactly (same weights, same seed) without floating-point drift across platforms.
+!/models/diagonalmar.pt
+
+# -- editors and build artifacts ---------------------------------------------------------------
+.idea/
+.vscode/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.DS_Store
+.superpowers/
+.tracking_cache.npz
+.challenge_tracking_cache*.npz

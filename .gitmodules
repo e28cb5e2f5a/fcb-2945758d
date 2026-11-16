@@ -1,0 +1,6 @@
+[submodule "tools/codeball"]
+	path = tools/codeball
+	url = https://github.com/metrica-sports/codeball.git
+[submodule "tools/kloppy"]
+	path = tools/kloppy
+	url = https://github.com/metrica-sports/kloppy.git
